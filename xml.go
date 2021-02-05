@@ -1265,7 +1265,13 @@ func marshalMapToXmlIndent(doIndent bool, b *bytes.Buffer, key string, value int
 					return err
 				}
 			}
-		case float64, bool, int, int32, int64, float32, json.Number:
+		case float64, float32:
+			v := fmt.Sprintf("%.4f", value)
+			elen = len(v) // always > 0
+			if _, err = b.WriteString(">" + v); err != nil {
+				return err
+			}
+		case bool, int, int32, int64, json.Number:
 			v := fmt.Sprintf("%v", value)
 			elen = len(v) // always > 0
 			if _, err = b.WriteString(">" + v); err != nil {
