@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"math"
 	"reflect"
 	"testing"
 )
@@ -20,13 +21,10 @@ func TestNewMapXml(t *testing.T) {
 		t.Fatal("merr:", merr.Error())
 	}
 
-	want := Map{"root2":
-		map[string]interface{}{
-			"newtag":
-				map[string]interface{}{"-newattr": "some_attr_value", "#text":"something more"},
-			"list":
-				map[string]interface{}{"-listattr":"val", "item":[]interface{}{"1", "2"}},
-		}}
+	want := Map{"root2": map[string]interface{}{
+		"newtag": map[string]interface{}{"-newattr": "some_attr_value", "#text": "something more"},
+		"list":   map[string]interface{}{"-listattr": "val", "item": []interface{}{"1", "2"}},
+	}}
 	if !reflect.DeepEqual(mv, want) {
 		fmt.Println("NewMapXml, x :", string(x))
 		fmt.Printf("NewMapXml, mv  : %#v\n", mv)
@@ -45,13 +43,10 @@ func TestAttrHyphenFalse(t *testing.T) {
 		t.Fatal("merr:", merr.Error())
 	}
 
-	want := Map{"root2":
-		map[string]interface{}{
-			"newtag":
-				map[string]interface{}{"newattr": "some_attr_value", "#text":"something more"},
-			"list":
-				map[string]interface{}{"listattr":"val", "item":[]interface{}{"1", "2"}},
-		}}
+	want := Map{"root2": map[string]interface{}{
+		"newtag": map[string]interface{}{"newattr": "some_attr_value", "#text": "something more"},
+		"list":   map[string]interface{}{"listattr": "val", "item": []interface{}{"1", "2"}},
+	}}
 	if !reflect.DeepEqual(mv, want) {
 		fmt.Println("AttrHyphenFalse, x :", string(x))
 		fmt.Printf("AttrHyphenFalse, mv  : %#v\n", mv)
@@ -161,7 +156,6 @@ func TestXml_5(t *testing.T) {
 	fmt.Println("Xml_5, x :", string(x))
 }
 
-
 func TestXml_Strings(t *testing.T) {
 	mv := Map{"sometag": "some data", "strings": []string{"string1", "string2"}}
 
@@ -174,6 +168,17 @@ func TestXml_Strings(t *testing.T) {
 	fmt.Println("Xml_strings, x :", string(x))
 }
 
+func TestXml_Floats(t *testing.T) {
+	mv := Map{"math.pi": math.Pi, "moreDecimals": 2160396.125908048, "tinyFloat": 0.00000000000000000000012, "bigFloat": 99999999999999.123456789}
+
+	x, err := mv.Xml()
+	if err != nil {
+		t.Fatal("err:", err.Error())
+	}
+
+	fmt.Println("Xml_strings, mv:", mv)
+	fmt.Println("Xml_strings, x :", string(x))
+}
 
 func TestXmlWriter(t *testing.T) {
 	mv := Map{"tag1": "some data", "tag2": "more data", "boolean": true, "float": 3.14159625}
@@ -192,7 +197,6 @@ func TestXmlWriter(t *testing.T) {
 
 	fmt.Println("XmlWriter, b  :", string(b))
 }
-
 
 // --------------------------  XML Handler test cases -------------------------
 

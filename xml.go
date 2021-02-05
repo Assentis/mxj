@@ -644,7 +644,7 @@ func XmlCheckIsValid(b ...bool) {
 		xmlCheckIsValid = b[0]
 		return
 	}
-	 xmlCheckIsValid = !xmlCheckIsValid
+	xmlCheckIsValid = !xmlCheckIsValid
 }
 
 // Encode a Map as XML.  The companion of NewMapXml().
@@ -1266,7 +1266,7 @@ func marshalMapToXmlIndent(doIndent bool, b *bytes.Buffer, key string, value int
 				}
 			}
 		case float64, float32:
-			v := fmt.Sprintf("%.4f", value)
+			v := fmt.Sprintf("%f", value)
 			elen = len(v) // always > 0
 			if _, err = b.WriteString(">" + v); err != nil {
 				return err
