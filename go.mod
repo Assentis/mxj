@@ -1,3 +1,3 @@
-module github.com/dosimeta/mxj/v2
+module github.com/Assentis/mxj/v2
 
 go 1.15
